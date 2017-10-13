@@ -66,7 +66,7 @@ public class MyPortalMyAppsRest
     // Constants
     protected static final String PLUGIN_PATH = "myapps/";
     protected static final String APPS_PATH = "apps/";
-    
+
     // Format constants
     private static final String FORMAT_MYAPPS_STATUS_RESPONSE = "status";
     private static final String FORMAT_MYAPPS_RESPONSE_RESULT = "result";
@@ -75,18 +75,19 @@ public class MyPortalMyAppsRest
     private static final String FORMAT_MYAPPS_NAME = "name";
     private static final String FORMAT_MYAPPS_ICON = "icon";
     private static final String FORMAT_MYAPPS_ORDER = "order";
-    
+
     // Status constants
     private static final String STATUS_OK = "OK";
     private static final String STATUS_KO = "KO";
-    
+
     // Parameters
     private static final String PARAMETER_ID_USER = "id_user";
-    
+
     /**
      * Return the list of all MyApps of a user
      * 
-     * @param strIdUser the id of the user to retrieve the list of MyApps from
+     * @param strIdUser
+     *            the id of the user to retrieve the list of MyApps from
      * @return the json list corresponding to the list of all user MyApps
      */
     @GET
@@ -101,7 +102,7 @@ public class MyPortalMyAppsRest
             // Retrieve the list of the applications of the user
             Plugin pluginMyAppsDatabase = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
             List<MyAppsDatabaseUser> listMyAppsDatabaseUser = MyAppsDatabaseUserHome.getUserListApplications( strIdUser, pluginMyAppsDatabase );
-            
+
             // Format the list of applications
             if ( listMyAppsDatabaseUser != null && !listMyAppsDatabaseUser.isEmpty( ) )
             {
@@ -118,7 +119,7 @@ public class MyPortalMyAppsRest
         String strResponse = formatResponse( strStatus, strFavoritesList );
 
         // Return the response
-        return Response.ok( strResponse, MediaType.APPLICATION_JSON ).build( );  
+        return Response.ok( strResponse, MediaType.APPLICATION_JSON ).build( );
     }
 
     /**
@@ -162,7 +163,7 @@ public class MyPortalMyAppsRest
 
         return jsonResponse.toString( );
     }
-    
+
     /**
      * Add the data from a MyApps object to a JsonObject
      * 
@@ -179,7 +180,7 @@ public class MyPortalMyAppsRest
             int nIdApplication = myAppsDatabaseUser.getIdApplication( );
             Plugin pluginMyAppsDatabase = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
             MyAppsDatabase myAppsDatabase = (MyAppsDatabase) MyAppsDatabaseService.getInstance( ).findByPrimaryKey( nIdApplication, pluginMyAppsDatabase );
-            
+
             // Collect the data from the MyAppsDatabase
             if ( myAppsDatabase != null )
             {
@@ -188,17 +189,17 @@ public class MyPortalMyAppsRest
                 jsonMyApps.accumulate( FORMAT_MYAPPS_NAME, myAppsDatabase.getName( ) );
                 jsonMyApps.accumulate( FORMAT_MYAPPS_ICON, getApplicationIcon( nIdAppsApplication ) );
             }
-            
+
             // Collect the data from the MyAppsDatabaseUser
             jsonMyApps.accumulate( FORMAT_MYAPPS_ORDER, myAppsDatabaseUser.getApplicationOrder( ) );
         }
     }
-    
+
     /**
      * Return the icon of the application as string encoded in base 64
      * 
      * @param nIdApplication
-     *          The id of the application
+     *            The id of the application
      * @return the string representation of the icon of the application
      */
     private String getApplicationIcon( int nIdApplication )
@@ -207,12 +208,12 @@ public class MyPortalMyAppsRest
 
         Plugin pluginMyAppsDatabase = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
         ImageResource imageResource = MyAppsDatabaseHome.getImageResource( nIdApplication, pluginMyAppsDatabase );
-        
+
         if ( imageResource != null && imageResource.getImage( ) != null )
         {
             strIconEncoded = Base64.getEncoder( ).encodeToString( imageResource.getImage( ) );
         }
-        
+
         return strIconEncoded;
     }
 }

@@ -54,12 +54,12 @@ public class MyPortalMyAppsServiceTest extends LuteceTestCase
     private static final int APPLICATION_ORDER_1 = 1;
     private static final int APPLICATION_ORDER_2 = 2;
     private static final int APPLICATION_ORDER_3 = 3;
-    
+
     // Messages
     private static final String ERROR_MESSAGE_LIST_NULL = "The list is null";
     private static final String ERROR_MESSAGE_LIST_SIZE = "The list have not the good size (expected %d but was %d)";
     private static final String ERROR_MESSAGE_LIST_ELEMENT = "The list element at the position %d is not the expected one (expected %d but was %d)";
-    
+
     // Variables
     private MyAppsDatabaseUser _myAppsToInsert = new MyAppsDatabaseUser( );
 
@@ -70,13 +70,13 @@ public class MyPortalMyAppsServiceTest extends LuteceTestCase
     {
         _myAppsToInsert.setIdApplication( APPLICATION_ID_3 );
         _myAppsToInsert.setApplicationOrder( APPLICATION_ORDER_1 );
-        
-        List<Integer> listCurrentOrder = new ArrayList<Integer>( );        
-        List<Integer> listExpectedResults = Arrays.asList( APPLICATION_ID_3 ); 
-        
+
+        List<Integer> listCurrentOrder = new ArrayList<Integer>( );
+        List<Integer> listExpectedResults = Arrays.asList( APPLICATION_ID_3 );
+
         compareList( listCurrentOrder, listExpectedResults, _myAppsToInsert );
     }
-    
+
     /**
      * Method which test the good reordering of a list when we insert an application at the first position
      */
@@ -84,13 +84,13 @@ public class MyPortalMyAppsServiceTest extends LuteceTestCase
     {
         _myAppsToInsert.setIdApplication( APPLICATION_ID_3 );
         _myAppsToInsert.setApplicationOrder( APPLICATION_ORDER_1 );
-        
-        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_1 );        
+
+        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_1 );
         List<Integer> listExpectedResults = Arrays.asList( APPLICATION_ID_3, APPLICATION_ID_2, APPLICATION_ID_1 );
-        
+
         compareList( listCurrentOrder, listExpectedResults, _myAppsToInsert );
     }
-    
+
     /**
      * Method which test the good reordering of a list when we insert an application in the middle of the list
      */
@@ -98,13 +98,13 @@ public class MyPortalMyAppsServiceTest extends LuteceTestCase
     {
         _myAppsToInsert.setIdApplication( APPLICATION_ID_3 );
         _myAppsToInsert.setApplicationOrder( APPLICATION_ORDER_2 );
-        
-        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_1 );        
+
+        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_1 );
         List<Integer> listExpectedResults = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_3, APPLICATION_ID_1 );
-        
+
         compareList( listCurrentOrder, listExpectedResults, _myAppsToInsert );
     }
-    
+
     /**
      * Method which test the good reordering of a list when we insert an application at the end of the list
      */
@@ -112,78 +112,77 @@ public class MyPortalMyAppsServiceTest extends LuteceTestCase
     {
         _myAppsToInsert.setIdApplication( APPLICATION_ID_3 );
         _myAppsToInsert.setApplicationOrder( APPLICATION_ORDER_3 );
-        
-        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_1 );        
+
+        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_1 );
         List<Integer> listExpectedResults = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_1, APPLICATION_ID_3 );
-        
+
         compareList( listCurrentOrder, listExpectedResults, _myAppsToInsert );
     }
-    
+
     /**
-     * Method which test the good reordering of a list when we modify the order of an application to the 
-     * beginning of the list
+     * Method which test the good reordering of a list when we modify the order of an application to the beginning of the list
      */
     public void testCreateListOrderOnModifyBegin( )
     {
         _myAppsToInsert.setIdApplication( APPLICATION_ID_3 );
         _myAppsToInsert.setApplicationOrder( APPLICATION_ORDER_1 );
-        
-        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_3, APPLICATION_ID_1 );        
+
+        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_3, APPLICATION_ID_1 );
         List<Integer> listExpectedResults = Arrays.asList( APPLICATION_ID_3, APPLICATION_ID_2, APPLICATION_ID_1 );
-        
-        compareList( listCurrentOrder, listExpectedResults, _myAppsToInsert );     
+
+        compareList( listCurrentOrder, listExpectedResults, _myAppsToInsert );
     }
-    
+
     /**
-     * Method which test the good reordering of a list when we modify the order of an application to the 
-     * middle of the list
+     * Method which test the good reordering of a list when we modify the order of an application to the middle of the list
      */
     public void testCreateListOrderOnModifyMiddle( )
     {
         _myAppsToInsert.setIdApplication( APPLICATION_ID_3 );
         _myAppsToInsert.setApplicationOrder( APPLICATION_ORDER_2 );
-        
-        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_3, APPLICATION_ID_2, APPLICATION_ID_1 );        
+
+        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_3, APPLICATION_ID_2, APPLICATION_ID_1 );
         List<Integer> listExpectedResults = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_3, APPLICATION_ID_1 );
-        
-        compareList( listCurrentOrder, listExpectedResults, _myAppsToInsert );    
+
+        compareList( listCurrentOrder, listExpectedResults, _myAppsToInsert );
     }
-    
+
     /**
-     * Method which test the good reordering of a list when we modify the order of an application to the 
-     * end of the list
+     * Method which test the good reordering of a list when we modify the order of an application to the end of the list
      */
     public void testCreateListOrderOnModifyEnd( )
     {
         _myAppsToInsert.setIdApplication( APPLICATION_ID_3 );
         _myAppsToInsert.setApplicationOrder( APPLICATION_ORDER_3 );
-        
-        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_3, APPLICATION_ID_1 );        
+
+        List<Integer> listCurrentOrder = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_3, APPLICATION_ID_1 );
         List<Integer> listExpectedResults = Arrays.asList( APPLICATION_ID_2, APPLICATION_ID_1, APPLICATION_ID_3 );
-        
+
         compareList( listCurrentOrder, listExpectedResults, _myAppsToInsert );
     }
 
     /**
-     * Make the test to compare the new list result compute from the old list with the expected list
-     * from the MyApps to insert
+     * Make the test to compare the new list result compute from the old list with the expected list from the MyApps to insert
      * 
-     * @param oldListOrder the old list order
-     * @param listExpectedResults the list of expected result
-     * @param myAppsToInsert the MyApps to insert in the list
+     * @param oldListOrder
+     *            the old list order
+     * @param listExpectedResults
+     *            the list of expected result
+     * @param myAppsToInsert
+     *            the MyApps to insert in the list
      */
     private void compareList( List<Integer> oldListOrder, List<Integer> listExpectedResults, MyAppsDatabaseUser myAppsToInsert )
     {
         MyPortalMyAppsService myPortalMyAppsService = new MyPortalMyAppsService( );
         List<Integer> listResultOrder = myPortalMyAppsService.manageMyAppsNewOrderList( oldListOrder, myAppsToInsert );
-        
+
         // Check that the list is not null or empty
         assertNotNull( ERROR_MESSAGE_LIST_NULL, listResultOrder );
-        
+
         Integer nExpectedListSize = listExpectedResults.size( );
         Integer nCurrentListSize = listResultOrder.size( );
         assertEquals( String.format( ERROR_MESSAGE_LIST_SIZE, nExpectedListSize, nCurrentListSize ), nExpectedListSize, nCurrentListSize );
-        
+
         // Check that the result list contains the element at the good position
         for ( int i = 0; i < listExpectedResults.size( ); i++ )
         {

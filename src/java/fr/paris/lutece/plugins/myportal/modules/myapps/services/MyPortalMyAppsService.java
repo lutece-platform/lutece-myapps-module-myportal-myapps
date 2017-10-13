@@ -60,11 +60,12 @@ public class MyPortalMyAppsService
      * Name of the bean of the service
      */
     public static final String BEAN_NAME = "myportal-myapps.myPortalMyAppsService";
-    
+
     /**
      * Return the list of MyApps of a user ordered with the order specify by the user
      * 
-     * @param strUserName the name of the user
+     * @param strUserName
+     *            the name of the user
      * @return the list of all MyApps of the user ordered
      */
     public List<MyApps> getOrderedMyAppsList( String strUserName )
@@ -72,17 +73,18 @@ public class MyPortalMyAppsService
         Plugin plugin = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
         return MyAppsDatabaseHome.getMyAppsListByUser( strUserName, plugin );
     }
-    
+
     /**
      * Return the list of all MyApps id ordered by the order specified by the user
      * 
-     * @param strUserName  the name of the user
+     * @param strUserName
+     *            the name of the user
      * @return the list of all MyApps id ordered by the order specified by the user
      */
     public List<Integer> getOrderedMyAppsIdList( String strUserName )
     {
         List<Integer> listMyAppsId = new ArrayList<>( );
-        
+
         List<MyApps> listMyApps = getOrderedMyAppsList( strUserName );
         if ( listMyApps != null && !listMyApps.isEmpty( ) )
         {
@@ -91,14 +93,15 @@ public class MyPortalMyAppsService
                 listMyAppsId.add( myApps.getIdApplication( ) );
             }
         }
-            
+
         return listMyAppsId;
     }
-    
+
     /**
      * Return the list of all MyApps of a user
      * 
-     * @param strUserName the name of a user
+     * @param strUserName
+     *            the name of a user
      * @return the list of all MyApps of a user
      */
     public List<MyAppsDatabaseUser> getUserMyAppsDatabse( String strUserName )
@@ -106,17 +109,18 @@ public class MyPortalMyAppsService
         Plugin plugin = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
         return MyAppsDatabaseUserHome.getUserListApplications( strUserName, plugin );
     }
-    
+
     /**
      * Return the list of all applications order used by the user
      * 
-     * @param strUserName the name of the user
+     * @param strUserName
+     *            the name of the user
      * @return the list of all applications order used by the user
      */
     public ReferenceList getUserListOrder( String strUserName )
     {
         ReferenceList referenceListOrder = new ReferenceList( );
-        
+
         List<MyAppsDatabaseUser> listUserMyApps = getUserMyAppsDatabse( strUserName );
         if ( listUserMyApps != null && !listUserMyApps.isEmpty( ) )
         {
@@ -124,53 +128,55 @@ public class MyPortalMyAppsService
             for ( MyAppsDatabaseUser myAppsDatabaseUser : listUserMyApps )
             {
                 String strApplicationOrder = String.valueOf( myAppsDatabaseUser.getApplicationOrder( ) );
-                
+
                 ReferenceItem referenceItemOrder = new ReferenceItem( );
                 referenceItemOrder.setCode( strApplicationOrder );
                 referenceItemOrder.setName( strApplicationOrder );
-                
+
                 referenceListOrder.add( referenceItemOrder );
             }
         }
-        
+
         return referenceListOrder;
     }
-    
+
     /**
-     * Returns the list of all applications position that the user can used 
-     * when he creates a new favorite application
+     * Returns the list of all applications position that the user can used when he creates a new favorite application
      * 
-     * @param strUserName the name of the user
+     * @param strUserName
+     *            the name of the user
      * @return the list of all applications position
      */
     public ReferenceList getUserListOrderForCreation( String strUserName )
     {
         // Retrieve the list of all order already in use
         ReferenceList referenceListOrder = getUserListOrder( strUserName );
-        
+
         String strNextOrderAvailable = String.valueOf( referenceListOrder.size( ) + 1 );
-        
+
         // Add another element for the next position in the list
         ReferenceItem referenceItemOrder = new ReferenceItem( );
         referenceItemOrder.setCode( strNextOrderAvailable );
         referenceItemOrder.setName( strNextOrderAvailable );
         referenceListOrder.add( referenceItemOrder );
-        
+
         return referenceListOrder;
     }
-    
+
     /**
      * Manage the list of current order for all user MyApps with the new MyApps
      * 
-     * @param listUserApplicationOrder the list of all MyApps id ordered
-     * @param myAppsUser the MyApps to order
+     * @param listUserApplicationOrder
+     *            the list of all MyApps id ordered
+     * @param myAppsUser
+     *            the MyApps to order
      * @return the list of the new MyApps order
      */
     public List<Integer> manageMyAppsNewOrderList( List<Integer> listUserApplicationOrder, MyAppsDatabaseUser myAppsUser )
     {
         List<Integer> listMyAppsOrder = new ArrayList<>( listUserApplicationOrder );
         if ( myAppsUser != null )
-        {   
+        {
             int nMyAppsId = myAppsUser.getIdApplication( );
             if ( listMyAppsOrder.isEmpty( ) )
             {
@@ -186,21 +192,23 @@ public class MyPortalMyAppsService
                 {
                     listMyAppsOrder.remove( nIndexMyApps );
                 }
-                
+
                 // Add the application id to the list
                 int nMyAppsOrder = myAppsUser.getApplicationOrder( );
                 listMyAppsOrder.add( nMyAppsOrder + NumberUtils.INTEGER_MINUS_ONE, nMyAppsId );
             }
         }
-        
+
         return listMyAppsOrder;
     }
-    
+
     /**
      * Manage the reordering of user MyApps and make the update in database
      * 
-     * @param listNewMyAppsOrder the new list of MyApps order
-     * @param strUserName the name of the user
+     * @param listNewMyAppsOrder
+     *            the new list of MyApps order
+     * @param strUserName
+     *            the name of the user
      */
     public void manageMyAppsReordering( List<Integer> listNewMyAppsOrder, String strUserName )
     {

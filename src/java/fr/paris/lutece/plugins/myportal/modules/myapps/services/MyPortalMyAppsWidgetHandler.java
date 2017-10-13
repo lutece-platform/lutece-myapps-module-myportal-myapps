@@ -57,30 +57,30 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 /**
-*
-* MyApps Widget Handler
-*
-*/
+ *
+ * MyApps Widget Handler
+ *
+ */
 public class MyPortalMyAppsWidgetHandler implements WidgetHandler
 {
     // Constants
     private static final String NAME = "module.myportal.myapps.widget.name";
     private static final String DESCRIPTION = "module.myportal.myapps.widget.description";
     private static final boolean IS_CUSTOMIZABLE = true;
-    
+
     // Templates
     private static final String TEMPLATE_WIDGET_MYAPPS = "skin/plugins/myportal/modules/myapps/widget_myapps.html";
-    
+
     // Properties
     private static final String PROPERTY_MYAPPS_URL_RETURN = "myportal-myapps.urlReturn.myapps";
     private static final String PROPERTY_MYPORTAL_URL_RETURN = "myportal-myapps.urlReturn.myportal";
-    
+
     // Marks
     private static final String MARK_USER_APPLICATIONS = "user_list_applications";
     private static final String MARK_ID_WIDGET = "id_widget";
     private static final String MARK_MYAPPS_URL_RETURN = "myapps_url_return";
     private static final String MARK_MYPORTAL_URL_RETURN = "myportal_url_return";
-    
+
     /**
      * {@inheritDoc}
      */
@@ -89,7 +89,7 @@ public class MyPortalMyAppsWidgetHandler implements WidgetHandler
     {
         return I18nService.getLocalizedString( NAME, Locale.FRENCH );
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -120,15 +120,15 @@ public class MyPortalMyAppsWidgetHandler implements WidgetHandler
         List<MyApps> listUserMyApps = MyAppsDatabaseHome.getMyAppsListByUser( strUserName, plugin );
 
         // Generate the model
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_USER_APPLICATIONS, listUserMyApps );       
+        Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( MARK_USER_APPLICATIONS, listUserMyApps );
         model.put( MARK_ID_WIDGET, ( widget != null ) ? widget.getIdWidget( ) : NumberUtils.INTEGER_MINUS_ONE );
         model.put( MARK_MYAPPS_URL_RETURN, AppPropertiesService.getProperty( PROPERTY_MYAPPS_URL_RETURN ) );
         model.put( MARK_MYPORTAL_URL_RETURN, AppPropertiesService.getProperty( PROPERTY_MYPORTAL_URL_RETURN ) );
 
         // Populate the template with the model
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_WIDGET_MYAPPS, request.getLocale( ), model );
-        
+
         return template.getHtml( );
     }
 
