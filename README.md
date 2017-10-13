@@ -1,4 +1,4 @@
-![](http://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=module-myportal-myapps-deploy)
+![](http://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=myapps-module-myportal-myapps-deploy)
 # Module myportal-myapps
 
 ## Introduction
@@ -7,7 +7,7 @@ This module add a widget which allow to a user to manage his list of favorites a
 
 He can add application to his list or remove one from it. He also has the possibility to modify his applications by modifying his logins/passwords. He can order his list based upon a order that he can configure whenhe adds or removes an application.
 
-This module has alos a REST service which allow to get the list of applications of a user with its data from the identifier of a user.
+This module has also a REST service which allow to get the list of applications of a user with its data from the identifier of a user.
 
 ## Usage
 

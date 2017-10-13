@@ -59,4 +59,10 @@
     	<jiraProjectName>MYPORTAPPS</jiraProjectName>
     	<jiraComponentId>13781</jiraComponentId>
 	</properties>
+	
+	<scm>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-myapps-module-myportal-myapps.git</connection>
+        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-myapps-module-myportal-myapps.git</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-myapps-module-myportal-myapps.git</url>
+    </scm>
 </project>
