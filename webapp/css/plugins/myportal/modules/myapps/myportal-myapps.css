@@ -1,0 +1,8 @@
+.myportal-myapps-table {
+	border-spacing: 10px;
+	border-collapse: separate;
+}
+
+.myportal-myapps-label {
+	width: 25% !important;
+}

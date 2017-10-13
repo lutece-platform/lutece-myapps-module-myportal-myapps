@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Module myportal-myapps</title>
+    </properties>
+    <body>
+        <section name="Module myportal-myapp">
+            <!--
+            <p>
+                <img src="images/myportal-myapps.png" />
+            </p>
+            -->
+            <subsection name="Introduction">
+                <p>Ce module ajoute une widget permettant à un utilisateur de gérer sa liste d'applications favorites.</p>
+                <p>Il peut ajouter des applications à sa liste ou en supprimer. Il a aussi la possibilité de modifier les applications qu'il 
+                s'est déjà attribuées en modifiant les logins/mot de passes de l'application. Il peut ordonner sa liste selon un order qu'il
+                définit lorsqu'il ajoute une application ou lors d'une modification.
+                </p>
+                <p>Ce module dispose d'un service REST qui permet de récupérer la liste des applications d'un usager avec ses informations à
+                partir de son identifiant.
+                </p>
+            </subsection>
+            <subsection name="Usage">
+                <p>Pour faire appel au service REST il faut utiliser l'url suivante:
+                	<em>/rest/myapps/apps/${id_user}</em> 
+                </p>
+            </subsection>
+        </section>
+    </body>
+</document>
+

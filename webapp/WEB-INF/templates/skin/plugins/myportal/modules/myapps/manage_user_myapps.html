@@ -1,0 +1,99 @@
+<div class="span-22 prepend-1 append-1 append-bottom last">
+    <div class="portlet -lutece-border-radius">
+		<h2 class="page-title">#i18n{module.myportal.myapps.manage_user_myapps.pageTitle}</h2>
+		<div class="myapps-content">
+			<@messages infos=infos />
+			<@messages errors=errors />
+			<fieldset>
+				<legend>
+					#i18n{module.myportal.myapps.manage_user_myapps.labelEnabledApp}
+				</legend>
+				<table class="myapps-table myportal-myapps-table">
+					<tr>
+						<th>#i18n{module.myportal.myapps.manage_user_myapps.columnTitleIcon}</th>
+				        <th>#i18n{module.myportal.myapps.manage_user_myapps.columnTitleName}</th>
+				        <th>#i18n{module.myportal.myapps.manage_user_myapps.columnTitleDescription}</th>
+				        <th>#i18n{module.myportal.myapps.manage_user_myapps.columnTitleActions}</th>
+				    </tr>
+				    <#if enabled_myapps_list?? && enabled_myapps_list?has_content>
+					    <#list enabled_myapps_list as enabled_myapp>
+						    <tr>
+						        <td>
+						        	<#if enabled_myapp.hasIcon(  )>
+						        		<img src="image?resource_type=myapps_database_icon&id=${enabled_myapp.idApplication}" alt="${enabled_myapp.description}" height="30"/>
+						        	</#if>
+						        </td>
+						        <td><b>${enabled_myapp.name}</b></td>
+						        <td>${enabled_myapp.description}</td>
+						        <td>
+							        <form method="post" action="jsp/site/Portal.jsp" style="display:inline;">
+							        	<input type="hidden" name="page" value="myportal-myapps" />
+							        	<input type="hidden" name="view" value="modify_user_myapps" />
+							        	<input type="hidden" name="myapp_id" value="${enabled_myapp.idApplication}" />
+							        	<input type="hidden" name="myapp_code_category" value="${myapp_category!''}" />				        		
+										<input type="hidden" name="myportal_url_return" value="${myportal_url_return!''}" />
+							        	<input type="submit" value="#i18n{module.myportal.myapps.manage_user_myapps.buttonModifyMyApp}" class="btn btn-primary" />
+							        </form>
+						        	<form method="post" action="jsp/site/Portal.jsp" style="display:inline;">
+						        		<input type="hidden" name="page" value="myportal-myapps" />
+						        		<input type="hidden" name="view" value="confirm_remove_user_myapps" />
+						        		<input type="hidden" name="myapp_id" value="${enabled_myapp.idApplication}" />
+						        		<input type="hidden" name="myapp_code_category" value="${myapp_category!''}" />
+										<input type="hidden" name="myportal_url_return" value="${myportal_url_return!''}" />
+						        		<input type="submit" value="#i18n{module.myportal.myapps.manage_user_myapps.buttonRemoveMyApp}" class="btn btn-danger" />
+						        	</form>
+						        </td>
+						    </tr>
+				    	</#list>
+				    </#if>
+				</table>
+			</fieldset>
+			<br />
+			<fieldset>
+				<legend>
+					#i18n{module.myportal.myapps.manage_user_myapps.labelDisabledApp}
+				</legend>
+				<table class="myapps-table myportal-myapps-table">
+					<tr>
+						<th>#i18n{module.myportal.myapps.manage_user_myapps.columnTitleIcon}</th>
+				        <th>#i18n{module.myportal.myapps.manage_user_myapps.columnTitleName}</th>
+				        <th>#i18n{module.myportal.myapps.manage_user_myapps.columnTitleDescription}</th>
+				        <th>#i18n{module.myportal.myapps.manage_user_myapps.columnTitleActions}</th>
+				    </tr>
+				    <#if disabled_myapps_list?? && disabled_myapps_list?has_content>
+					    <#list disabled_myapps_list as disabled_myapp>
+						    <tr>
+						        <td>
+						        	<#if disabled_myapp.hasIcon(  )>
+						        		<img src="image?resource_type=myapps_database_icon&id=${disabled_myapp.idApplication}" alt="${disabled_myapp.description}" height="30"/>
+						        	</#if>
+						        </td>
+						        <td><b>${disabled_myapp.name}</b></td>
+						        <td>${disabled_myapp.description}</td>
+						        <td>
+						        	<form method="post" action="jsp/site/Portal.jsp">
+						        		<input type="hidden" name="page" value="myportal-myapps" />
+						        		<input type="hidden" name="view" value="insert_user_myapps" />
+						        		<input type="hidden" name="myapp_id" value="${disabled_myapp.idApplication}" />
+						        		<input type="hidden" name="myapp_code_category" value="${myapp_category!''}" />
+										<input type="hidden" name="myportal_url_return" value="${myportal_url_return!''}" />
+						        		<input type="submit" value="#i18n{module.myportal.myapps.manage_user_myapps.buttonInsertMyApp}" class="btn btn-primary" />
+						        	</form>
+						        </td>
+						    </tr>
+				    	</#list>
+				    </#if>
+				</table>
+				<#if myportal_url_return?has_content>
+					<form method="post" action="jsp/site/Portal.jsp?page=myportal-myapps&view=manage_user_myapps">
+						<input type="hidden" name="myportal_url_return" value="${myportal_url_return!''}" />
+						<button class="btn btn-default btn-flat" name="back" type="submit" title="#i18n{portal.util.labelBack}" formnovalidate>
+							<i class="fa fa-close" aria-hidden="true"></i>
+							#i18n{portal.util.labelBack}
+						</button>
+					</form>
+				</#if>
+			</fieldset>
+		</div>
+	</div>
+</div>

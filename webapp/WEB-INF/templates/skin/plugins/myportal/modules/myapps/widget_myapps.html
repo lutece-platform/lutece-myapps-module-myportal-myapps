@@ -1,0 +1,34 @@
+<div id="myportal-myapps">
+	<h3>#i18n{module.myportal.myapps.manage_myapps.title}</h3>
+	<p>
+		<a href="jsp/site/Portal.jsp?page=myportal-myapps&amp;view=manage_user_myapps&amp;myportal_url_return=${myportal_url_return}&amp;id_widget=${id_widget}" class="ceebox">
+			<span class="">+</span>&nbsp;#i18n{module.myportal.myapps.manage_myapps.buttonManage}
+		</a>
+	</p>
+	<form method="post" action="jsp/site/Portal.jsp?page=myportal-myapps">
+		<input type="hidden" name="id_widget" value="${id_widget}" />
+		<input type="hidden" name="myportal_url_return" value="${myportal_url_return}" />
+		<table class="myapps-table myportal-myapps-table">
+			<#if user_list_applications?? && user_list_applications?has_content>
+	   			<#list user_list_applications as user_application>
+   					<tr>
+   						<td>				
+							<#if user_application.hasIcon(  )>
+								<img src="image?resource_type=myapps_database_icon&id=${user_application.idApplication}" alt="${user_application.description}" height="30"/>
+							</#if>
+						</td>
+						<td>
+							<a href="${user_application.url!}" class="ceebox">
+								${user_application.name!}
+							</a>
+						</td>
+						<td>
+							<@aButton href='jsp/site/Portal.jsp?page=myportal-myapps&view=modify_user_myapps&myapp_id=${user_application.idApplication}&from_widget=1&myportal_url_return=${myportal_url_return}&id_widget=${id_widget}' title='#i18n{portal.util.labelModify}' buttonIcon='edit' showTitle=false color='btn-primary' />
+							<@aButton href='jsp/site/Portal.jsp?page=myportal-myapps&view=confirm_remove_user_myapps&myapp_id=${user_application.idApplication}&from_widget=1&myportal_url_return=${myportal_url_return}&id_widget=${id_widget}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' showTitle=false color='btn-danger' />
+						</td>
+					</tr>
+	   			</#list>
+	   		</#if>
+	   	</table>
+	</form>
+</div>

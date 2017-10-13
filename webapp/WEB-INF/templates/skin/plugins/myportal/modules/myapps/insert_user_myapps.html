@@ -1,0 +1,56 @@
+<div class="span-22 prepend-1 append-1 append-bottom last">
+    <div class="portlet -lutece-border-radius">
+		<h2 class="page-title">#i18n{module.myportal.myapps.insert_user_myapps.pageTitle}</h2>
+		<div class="myapps-content">
+			<legend>
+				${myapp.name} <#if myapp.description?? && myapp.description != "">- ${myapp.description}</#if>
+			</legend>
+			<form method="post" action="jsp/site/Portal.jsp?page=myportal-myapps&amp;action=do_insert_user_myapps">
+				<input type="hidden" name="myapp_id" value="${myapp.idApplication}" />
+				<input type="hidden" name="myapp_code_category" value="${myapp_category!''}" />
+				<div class="form-group">
+					<#if myapp.code?? && myapp.code != ''>
+						<label for="user_login" class="myportal-myapps-label">
+							#i18n{module.myportal.myapps.insert_user_myapps.labelLogin}
+	                        <#if myapp.codeHeading?? && myapp.codeHeading != "">
+								${myapp.codeHeading}
+	                        </#if>
+	                        * :
+						</label>
+						<input name="user_login" id="user_login" type="text" value="" />
+					</#if>
+				</div>
+				<div class="form-group">
+					<#if myapp.password?? && myapp.password != ''>
+						<label for="user_password" class="myportal-myapps-label">
+							#i18n{module.myportal.myapps.insert_user_myapps.labelPassword} * :
+						</label>
+						<input name="user_password" id="user_password" type="password" value="" />
+					</#if>
+				</div>
+				<div class="form-group">
+					<#if myapp.data?? && myapp.data != "" && myapp.dataHeading?? && myapp.dataHeading != "">
+						<label for="user_extra_data" class="myportal-myapps-label">
+							#i18n{module.myportal.myapps.insert_user_myapps.labelExtraField}
+	                        (${myapp.dataHeading})
+	                        * :
+						</label>
+						<input name="user_extra_data" id="user_extra_data" type="password" value="" />
+					</#if>
+				</div>
+				<div class="form-group">
+					<label for="application_order" class="myportal-myapps-label">
+						#i18n{module.myportal.myapps.insert_user_myapps.labelOrder}
+					</label>
+					<@comboWithParams name="application_order" items=myapps_order_list default_value="1" additionalParameters="" />
+				</div>
+				<input type="submit" value="#i18n{portal.util.labelValidate}" class="btn btn-primary" />
+				<input type="hidden" name="myportal_url_return" value="${myportal_url_return!''}" />
+				<button class="btn btn-default btn-flat" name="back" type="submit" title="#i18n{portal.util.labelBack}" formnovalidate>
+					<i class="fa fa-close" aria-hidden="true"></i>
+					#i18n{portal.util.labelBack}
+				</button>
+			</form>
+    	</div>
+	</div>
+</div>
