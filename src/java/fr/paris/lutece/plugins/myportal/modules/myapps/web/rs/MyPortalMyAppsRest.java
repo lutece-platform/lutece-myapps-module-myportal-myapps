@@ -36,9 +36,11 @@ package fr.paris.lutece.plugins.myportal.modules.myapps.web.rs;
 import java.util.Base64;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -54,6 +56,8 @@ import fr.paris.lutece.plugins.rest.service.RestConstants;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.security.LuteceUser;
+import fr.paris.lutece.portal.service.security.SecurityService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -80,28 +84,28 @@ public class MyPortalMyAppsRest
     private static final String STATUS_OK = "OK";
     private static final String STATUS_KO = "KO";
 
-    // Parameters
-    private static final String PARAMETER_ID_USER = "id_user";
-
     /**
      * Return the list of all MyApps of a user
      * 
-     * @param strIdUser
-     *            the id of the user to retrieve the list of MyApps from
+     *
+     * @param request httpServletRequest
      * @return the json list corresponding to the list of all user MyApps
      */
     @GET
-    @Path( '{' + PARAMETER_ID_USER + '}' )
-    public Response getUserMyAppsList( @PathParam( PARAMETER_ID_USER ) String strIdUser )
+    public Response getUserMyAppsList( @Context HttpServletRequest request)
     {
         String strStatus = STATUS_OK;
         String strFavoritesList = StringUtils.EMPTY;
+        
+        LuteceUser user = SecurityService.getInstance().getRegisteredUser(request);
+        //the user must be authenticated
+        if( user != null ){
 
         try
         {
             // Retrieve the list of the applications of the user
             Plugin pluginMyAppsDatabase = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
-            List<MyAppsDatabaseUser> listMyAppsDatabaseUser = MyAppsDatabaseUserHome.getUserListApplications( strIdUser, pluginMyAppsDatabase );
+            List<MyAppsDatabaseUser> listMyAppsDatabaseUser = MyAppsDatabaseUserHome.getUserListApplications( user.getName( ), pluginMyAppsDatabase );
 
             // Format the list of applications
             if ( listMyAppsDatabaseUser != null && !listMyAppsDatabaseUser.isEmpty( ) )
@@ -114,6 +118,12 @@ public class MyPortalMyAppsRest
             // We set the status at KO if an error occurred during the processing
             strStatus = STATUS_KO;
         }
+       }else
+       {
+           strStatus = STATUS_KO;
+           
+       }
+        
 
         // Format the response with the given status and the list of favorites
         String strResponse = formatResponse( strStatus, strFavoritesList );
