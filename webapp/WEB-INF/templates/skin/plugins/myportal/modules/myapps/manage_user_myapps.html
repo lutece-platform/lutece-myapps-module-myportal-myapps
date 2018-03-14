@@ -32,6 +32,7 @@
 							        	<input type="hidden" name="myapp_id" value="${enabled_myapp.idApplication}" />
 							        	<input type="hidden" name="myapp_code_category" value="${myapp_category!''}" />				        		
 										<input type="hidden" name="myportal_url_return" value="${myportal_url_return!''}" />
+										<input type="hidden" name="id_widget" value="${id_widget}">
 							        	<input type="submit" value="#i18n{module.myportal.myapps.manage_user_myapps.buttonModifyMyApp}" class="btn btn-primary" />
 							        </form>
 						        	<form method="post" action="jsp/site/Portal.jsp" style="display:inline;">
@@ -40,6 +41,7 @@
 						        		<input type="hidden" name="myapp_id" value="${enabled_myapp.idApplication}" />
 						        		<input type="hidden" name="myapp_code_category" value="${myapp_category!''}" />
 										<input type="hidden" name="myportal_url_return" value="${myportal_url_return!''}" />
+										<input type="hidden" name="id_widget" value="${id_widget}">
 						        		<input type="submit" value="#i18n{module.myportal.myapps.manage_user_myapps.buttonRemoveMyApp}" class="btn btn-danger" />
 						        	</form>
 						        </td>
@@ -77,6 +79,7 @@
 						        		<input type="hidden" name="myapp_id" value="${disabled_myapp.idApplication}" />
 						        		<input type="hidden" name="myapp_code_category" value="${myapp_category!''}" />
 										<input type="hidden" name="myportal_url_return" value="${myportal_url_return!''}" />
+										<input type="hidden" name="id_widget" value="${id_widget}">
 						        		<input type="submit" value="#i18n{module.myportal.myapps.manage_user_myapps.buttonInsertMyApp}" class="btn btn-primary" />
 						        	</form>
 						        </td>

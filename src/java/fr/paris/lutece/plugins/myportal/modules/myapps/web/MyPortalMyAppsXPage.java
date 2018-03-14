@@ -52,6 +52,7 @@ import fr.paris.lutece.plugins.myapps.modules.database.service.MyAppsDatabasePlu
 import fr.paris.lutece.plugins.myapps.modules.database.service.MyAppsDatabaseService;
 import fr.paris.lutece.plugins.myapps.modules.database.utils.constants.MyAppsDatabaseConstants;
 import fr.paris.lutece.plugins.myportal.modules.myapps.services.MyPortalMyAppsService;
+import fr.paris.lutece.plugins.myportal.service.WidgetContentService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
@@ -113,6 +114,7 @@ public class MyPortalMyAppsXPage extends MVCApplication
     private static final String PARAMETER_MYAPP_CODE_CATEGORY = "myapp_code_category";
     private static final String PARAMETER_FROM_WIDGET = "from_widget";
     private static final String PARAMETER_MYAPPS_ORDER = "application_order";
+    private static final String PARAMETER_ID_WIDGET = "id_widget";
 
     // Marks
     private static final String MARK_MYAPP = "myapp";
@@ -145,7 +147,8 @@ public class MyPortalMyAppsXPage extends MVCApplication
     // Variables
     private List<Integer> _listUserApplicationOrder = new ArrayList<>( );
     private final MyPortalMyAppsService _myPortalMyAppsService = SpringContextService.getBean( MyPortalMyAppsService.BEAN_NAME );
-
+    private final WidgetContentService _widgetContentService = SpringContextService.getBean( WidgetContentService.BEAN_NAME );
+    
     /**
      * The manage page for adding or removing applications of a user
      * 
@@ -161,6 +164,8 @@ public class MyPortalMyAppsXPage extends MVCApplication
         String strBackParameter = request.getParameter( PARAMETER_BACK );
         String strBaseUrl = AppPathService.getBaseUrl( request );
         String strMyPortalUrlReturn = request.getParameter( PARAMETER_MYPORTAL_URL_RETURN );
+        String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
+        
         if ( strBackParameter != null && StringUtils.isNotBlank( strMyPortalUrlReturn ) )
         {
             return redirect( request, strBaseUrl + strMyPortalUrlReturn );
@@ -186,6 +191,7 @@ public class MyPortalMyAppsXPage extends MVCApplication
         model.put( MARK_DISABLED_MYAPPS_LIST, listDisabledMyApps );
         model.put( MARK_MYAPP_CATEGORY, strMyAppCategory );
         model.put( MARK_MYPORTAL_URL_RETURN, strMyPortalUrlReturn );
+        model.put( PARAMETER_ID_WIDGET, strIdWidget );
 
         // Populate the template with the model and construct the XPage associated
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_USER_MYAPPS, request.getLocale( ), model );
@@ -215,6 +221,7 @@ public class MyPortalMyAppsXPage extends MVCApplication
 
         String strMyAppId = request.getParameter( PARAMETER_MYAPP_ID );
         String strMyAppCategory = request.getParameter( PARAMETER_MYAPP_CODE_CATEGORY );
+        String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
 
         if ( StringUtils.isNotBlank( strMyAppId ) && StringUtils.isNumeric( strMyAppId ) )
         {
@@ -234,6 +241,7 @@ public class MyPortalMyAppsXPage extends MVCApplication
                 model.put( MARK_MYAPP_CATEGORY, strMyAppCategory );
                 model.put( MARK_MYPORTAL_URL_RETURN, strMyPortalUrlReturn );
                 model.put( MARK_USER_MYAPPS_ORDER_LIST, _myPortalMyAppsService.getUserListOrderForCreation( strUserName ) );
+                model.put( PARAMETER_ID_WIDGET, strIdWidget );
 
                 // Populate the template with the model and construct the XPage
                 HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_INSERT_USER_MYAPPS, request.getLocale( ), model );
@@ -273,9 +281,12 @@ public class MyPortalMyAppsXPage extends MVCApplication
     public XPage doInsertUserMyApps( HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         String strMyPortalUrlReturn = request.getParameter( PARAMETER_MYPORTAL_URL_RETURN );
+        
+        String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
 
         Map<String, String> model = new HashMap<String, String>( );
         model.put( MARK_MYPORTAL_URL_RETURN, strMyPortalUrlReturn );
+        model.put( PARAMETER_ID_WIDGET, strIdWidget );
 
         // Manage the return back
         String strBackParameter = request.getParameter( PARAMETER_BACK );
@@ -288,9 +299,15 @@ public class MyPortalMyAppsXPage extends MVCApplication
         LuteceUser luteceUser = getUser( request );
         Plugin plugin = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
         MyAppsDatabaseUser myAppsUser = getMyAppsDatabaseUserInfo( request, luteceUser, plugin );
+        
+        
 
         if ( myAppsUser != null )
         {
+        	// remove widget content cache
+        	int nIdWidget = Integer.parseInt( strIdWidget );
+        	_widgetContentService.removeCache(nIdWidget, luteceUser);
+        	
             // Associate the application to the user
             MyAppsDatabaseService.getInstance( ).createMyAppUser( myAppsUser, plugin );
 
@@ -324,6 +341,7 @@ public class MyPortalMyAppsXPage extends MVCApplication
         String strMyAppCategory = request.getParameter( MyAppsDatabaseConstants.PARAMETER_MYAPP_CODE_CATEGORY );
         String strMyPortalUrlReturn = request.getParameter( PARAMETER_MYPORTAL_URL_RETURN );
         String strFromWidget = request.getParameter( PARAMETER_FROM_WIDGET );
+        String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
 
         if ( StringUtils.isNotBlank( strMyAppId ) && StringUtils.isNumeric( strMyAppId ) )
         {
@@ -350,6 +368,7 @@ public class MyPortalMyAppsXPage extends MVCApplication
                 model.put( PARAMETER_FROM_WIDGET, strFromWidget );
                 model.put( MARK_MYAPPS_CURRENT_ORDER, nOrder );
                 model.put( MARK_USER_MYAPPS_ORDER_LIST, _myPortalMyAppsService.getUserListOrder( strUserName ) );
+                model.put( PARAMETER_ID_WIDGET, strIdWidget );
 
                 // Populate the template with the model
                 XPage page = new XPage( );
@@ -390,9 +409,14 @@ public class MyPortalMyAppsXPage extends MVCApplication
     public XPage doModifyUserMyApps( HttpServletRequest request ) throws SiteMessageException, UserNotSignedException
     {
         String strMyPortalUrlReturn = request.getParameter( PARAMETER_MYPORTAL_URL_RETURN );
+        String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
 
+        
+        
         Map<String, String> model = new HashMap<String, String>( );
         model.put( MARK_MYPORTAL_URL_RETURN, strMyPortalUrlReturn );
+        model.put( PARAMETER_ID_WIDGET, strIdWidget );
+        
 
         // Manage the return back
         String strBackParameter = request.getParameter( PARAMETER_BACK );
@@ -413,6 +437,10 @@ public class MyPortalMyAppsXPage extends MVCApplication
 
         if ( myAppsUser != null )
         {
+        	// remove widget content cache
+        	int nIdWidget = Integer.parseInt( strIdWidget );
+        	_widgetContentService.removeCache(nIdWidget, luteceUser);
+        	
             // Update the user application
             MyAppsDatabaseService.getInstance( ).updateMyAppUser( myAppsUser, plugin );
 
@@ -454,11 +482,13 @@ public class MyPortalMyAppsXPage extends MVCApplication
         String strUrlReturn = request.getParameter( PARAMETER_MYPORTAL_URL_RETURN );
         String strIdMyApp = request.getParameter( PARAMETER_MYAPP_ID );
         String strFromWidget = request.getParameter( PARAMETER_FROM_WIDGET );
+        String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
 
         // Construct the return url of the confirmation page
         UrlItem url = new UrlItem( SITE_URL + getActionUrl( ACTION_DO_REMOVE_USER_MYAPPS ) );
         url.addParameter( PARAMETER_MYAPP_ID, strIdMyApp );
         url.addParameter( PARAMETER_MYPORTAL_URL_RETURN, strUrlReturn );
+        url.addParameter( PARAMETER_ID_WIDGET, strIdWidget );
         if ( StringUtils.isNotBlank( strFromWidget ) )
         {
             url.addParameter( PARAMETER_FROM_WIDGET, strFromWidget );
@@ -484,16 +514,23 @@ public class MyPortalMyAppsXPage extends MVCApplication
     {
         String strMyAppId = request.getParameter( PARAMETER_MYAPP_ID );
         String strMyPortalUrlReturn = request.getParameter( PARAMETER_MYPORTAL_URL_RETURN );
+        String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
 
         Map<String, String> model = new HashMap<String, String>( );
         model.put( MARK_MYPORTAL_URL_RETURN, strMyPortalUrlReturn );
+        model.put( PARAMETER_ID_WIDGET, strIdWidget );
 
         if ( StringUtils.isNotBlank( strMyAppId ) && StringUtils.isNumeric( strMyAppId ) )
         {
+        	
             // Retrieve the ordered list of user applications
             LuteceUser luteceUser = getUser( request );
             _listUserApplicationOrder = _myPortalMyAppsService.getOrderedMyAppsIdList( luteceUser.getName( ) );
 
+            //remove widget content cache
+            int nIdWidget = Integer.parseInt( strIdWidget );
+        	_widgetContentService.removeCache(nIdWidget, luteceUser);
+            
             // Remove the user application
             int nMyAppId = Integer.parseInt( strMyAppId );
             Plugin plugin = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );

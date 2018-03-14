@@ -7,6 +7,7 @@
 			</legend>
 			<form method="post" action="jsp/site/Portal.jsp?page=myportal-myapps&amp;action=do_insert_user_myapps">
 				<input type="hidden" name="myapp_id" value="${myapp.idApplication}" />
+				<input type="hidden" name="id_widget" value="${id_widget}">
 				<input type="hidden" name="myapp_code_category" value="${myapp_category!''}" />
 				<div class="form-group">
 					<#if myapp.code?? && myapp.code != ''>
