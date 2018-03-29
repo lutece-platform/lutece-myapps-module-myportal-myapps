@@ -71,9 +71,7 @@ public class MyPortalMyAppsRest
     protected static final String USER_GUID = "user_guid";
     protected static final String PLUGIN_PATH = "myapps/";
     protected static final String PATH_APPS = "public/apps/";
-    protected static final String PATH_APPS_BY_USERGUID = "private/apps/{" + MyPortalMyAppsRest.USER_GUID+ "}";
-    
-
+    protected static final String PATH_APPS_BY_USERGUID = "private/apps/{" + MyPortalMyAppsRest.USER_GUID + "}";
 
     // Format constants
     private static final String FORMAT_MYAPPS_STATUS_RESPONSE = "status";
@@ -92,78 +90,28 @@ public class MyPortalMyAppsRest
      * Return the list of all MyApps of a user
      * 
      *
-     * @param request httpServletRequest
+     * @param request
+     *            httpServletRequest
      * @return the json list corresponding to the list of all user MyApps
      */
     @GET
     @Path( MyPortalMyAppsRest.PATH_APPS )
-    public Response getUserMyAppsList( @Context HttpServletRequest request)
+    public Response getUserMyAppsList( @Context HttpServletRequest request )
     {
         String strStatus = STATUS_OK;
         String strFavoritesList = StringUtils.EMPTY;
-        
-        LuteceUser user = SecurityService.getInstance().getRegisteredUser(request);
-        //the user must be authenticated
-        if( user != null ){
 
-        try
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+        // the user must be authenticated
+        if ( user != null )
         {
-            // Retrieve the list of the applications of the user
-            Plugin pluginMyAppsDatabase = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
-            List<MyAppsDatabaseUser> listMyAppsDatabaseUser = MyAppsDatabaseUserHome.getUserListApplications( user.getName( ), pluginMyAppsDatabase );
-
-            // Format the list of applications
-            if ( listMyAppsDatabaseUser != null && !listMyAppsDatabaseUser.isEmpty( ) )
-            {
-                strFavoritesList = formatUserMyAppsList( listMyAppsDatabaseUser );
-            }
-        }
-        catch( Exception exception )
-        {
-            // We set the status at KO if an error occurred during the processing
-            strStatus = STATUS_KO;
-        }
-       }else
-       {
-           strStatus = STATUS_KO;
-           
-       }
-        
-
-        // Format the response with the given status and the list of favorites
-        String strResponse = formatResponse( strStatus, strFavoritesList );
-
-        // Return the response
-        return Response.ok( strResponse, MediaType.APPLICATION_JSON ).build( );
-    }
-    
-    
-    /**
-     * Return the list of all MyApps of a user by user guid
-     * the rest service is protected by signed request
-     *
-     * @param request httpServletRequest
-     * @param strGuid the user Guid
-     * @return the json list corresponding to the list of all user MyApps
-     */
-    @GET
-    @Path( MyPortalMyAppsRest.PATH_APPS_BY_USERGUID )
-    public Response getUserMyAppsListByGuid( @Context HttpServletRequest request,@PathParam( MyPortalMyAppsRest.USER_GUID )
-    String strGuid)
-    {
-        String strStatus = STATUS_OK;
-        String strFavoritesList = StringUtils.EMPTY;
-        
-      
-        //the user must be authenticated
-        if( !StringUtils.isEmpty(strGuid)){
 
             try
             {
                 // Retrieve the list of the applications of the user
                 Plugin pluginMyAppsDatabase = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
-                List<MyAppsDatabaseUser> listMyAppsDatabaseUser = MyAppsDatabaseUserHome.getUserListApplications( strGuid, pluginMyAppsDatabase );
-    
+                List<MyAppsDatabaseUser> listMyAppsDatabaseUser = MyAppsDatabaseUserHome.getUserListApplications( user.getName( ), pluginMyAppsDatabase );
+
                 // Format the list of applications
                 if ( listMyAppsDatabaseUser != null && !listMyAppsDatabaseUser.isEmpty( ) )
                 {
@@ -175,12 +123,63 @@ public class MyPortalMyAppsRest
                 // We set the status at KO if an error occurred during the processing
                 strStatus = STATUS_KO;
             }
-           }else
-           {
-               strStatus = STATUS_KO;
-               
-           }
-        
+        }
+        else
+        {
+            strStatus = STATUS_KO;
+
+        }
+
+        // Format the response with the given status and the list of favorites
+        String strResponse = formatResponse( strStatus, strFavoritesList );
+
+        // Return the response
+        return Response.ok( strResponse, MediaType.APPLICATION_JSON ).build( );
+    }
+
+    /**
+     * Return the list of all MyApps of a user by user guid the rest service is protected by signed request
+     *
+     * @param request
+     *            httpServletRequest
+     * @param strGuid
+     *            the user Guid
+     * @return the json list corresponding to the list of all user MyApps
+     */
+    @GET
+    @Path( MyPortalMyAppsRest.PATH_APPS_BY_USERGUID )
+    public Response getUserMyAppsListByGuid( @Context HttpServletRequest request, @PathParam( MyPortalMyAppsRest.USER_GUID ) String strGuid )
+    {
+        String strStatus = STATUS_OK;
+        String strFavoritesList = StringUtils.EMPTY;
+
+        // the user must be authenticated
+        if ( !StringUtils.isEmpty( strGuid ) )
+        {
+
+            try
+            {
+                // Retrieve the list of the applications of the user
+                Plugin pluginMyAppsDatabase = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
+                List<MyAppsDatabaseUser> listMyAppsDatabaseUser = MyAppsDatabaseUserHome.getUserListApplications( strGuid, pluginMyAppsDatabase );
+
+                // Format the list of applications
+                if ( listMyAppsDatabaseUser != null && !listMyAppsDatabaseUser.isEmpty( ) )
+                {
+                    strFavoritesList = formatUserMyAppsList( listMyAppsDatabaseUser );
+                }
+            }
+            catch( Exception exception )
+            {
+                // We set the status at KO if an error occurred during the processing
+                strStatus = STATUS_KO;
+            }
+        }
+        else
+        {
+            strStatus = STATUS_KO;
+
+        }
 
         // Format the response with the given status and the list of favorites
         String strResponse = formatResponse( strStatus, strFavoritesList );

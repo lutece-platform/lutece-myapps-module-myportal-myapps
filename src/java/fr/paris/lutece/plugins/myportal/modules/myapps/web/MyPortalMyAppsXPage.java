@@ -148,7 +148,7 @@ public class MyPortalMyAppsXPage extends MVCApplication
     private List<Integer> _listUserApplicationOrder = new ArrayList<>( );
     private final MyPortalMyAppsService _myPortalMyAppsService = SpringContextService.getBean( MyPortalMyAppsService.BEAN_NAME );
     private final WidgetContentService _widgetContentService = SpringContextService.getBean( WidgetContentService.BEAN_NAME );
-    
+
     /**
      * The manage page for adding or removing applications of a user
      * 
@@ -165,7 +165,7 @@ public class MyPortalMyAppsXPage extends MVCApplication
         String strBaseUrl = AppPathService.getBaseUrl( request );
         String strMyPortalUrlReturn = request.getParameter( PARAMETER_MYPORTAL_URL_RETURN );
         String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
-        
+
         if ( strBackParameter != null && StringUtils.isNotBlank( strMyPortalUrlReturn ) )
         {
             return redirect( request, strBaseUrl + strMyPortalUrlReturn );
@@ -281,7 +281,7 @@ public class MyPortalMyAppsXPage extends MVCApplication
     public XPage doInsertUserMyApps( HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         String strMyPortalUrlReturn = request.getParameter( PARAMETER_MYPORTAL_URL_RETURN );
-        
+
         String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
 
         Map<String, String> model = new HashMap<String, String>( );
@@ -299,15 +299,13 @@ public class MyPortalMyAppsXPage extends MVCApplication
         LuteceUser luteceUser = getUser( request );
         Plugin plugin = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
         MyAppsDatabaseUser myAppsUser = getMyAppsDatabaseUserInfo( request, luteceUser, plugin );
-        
-        
 
         if ( myAppsUser != null )
         {
-        	// remove widget content cache
-        	int nIdWidget = Integer.parseInt( strIdWidget );
-        	_widgetContentService.removeCache(nIdWidget, luteceUser);
-        	
+            // remove widget content cache
+            int nIdWidget = Integer.parseInt( strIdWidget );
+            _widgetContentService.removeCache( nIdWidget, luteceUser );
+
             // Associate the application to the user
             MyAppsDatabaseService.getInstance( ).createMyAppUser( myAppsUser, plugin );
 
@@ -411,12 +409,9 @@ public class MyPortalMyAppsXPage extends MVCApplication
         String strMyPortalUrlReturn = request.getParameter( PARAMETER_MYPORTAL_URL_RETURN );
         String strIdWidget = request.getParameter( PARAMETER_ID_WIDGET );
 
-        
-        
         Map<String, String> model = new HashMap<String, String>( );
         model.put( MARK_MYPORTAL_URL_RETURN, strMyPortalUrlReturn );
         model.put( PARAMETER_ID_WIDGET, strIdWidget );
-        
 
         // Manage the return back
         String strBackParameter = request.getParameter( PARAMETER_BACK );
@@ -437,10 +432,10 @@ public class MyPortalMyAppsXPage extends MVCApplication
 
         if ( myAppsUser != null )
         {
-        	// remove widget content cache
-        	int nIdWidget = Integer.parseInt( strIdWidget );
-        	_widgetContentService.removeCache(nIdWidget, luteceUser);
-        	
+            // remove widget content cache
+            int nIdWidget = Integer.parseInt( strIdWidget );
+            _widgetContentService.removeCache( nIdWidget, luteceUser );
+
             // Update the user application
             MyAppsDatabaseService.getInstance( ).updateMyAppUser( myAppsUser, plugin );
 
@@ -522,15 +517,15 @@ public class MyPortalMyAppsXPage extends MVCApplication
 
         if ( StringUtils.isNotBlank( strMyAppId ) && StringUtils.isNumeric( strMyAppId ) )
         {
-        	
+
             // Retrieve the ordered list of user applications
             LuteceUser luteceUser = getUser( request );
             _listUserApplicationOrder = _myPortalMyAppsService.getOrderedMyAppsIdList( luteceUser.getName( ) );
 
-            //remove widget content cache
+            // remove widget content cache
             int nIdWidget = Integer.parseInt( strIdWidget );
-        	_widgetContentService.removeCache(nIdWidget, luteceUser);
-            
+            _widgetContentService.removeCache( nIdWidget, luteceUser );
+
             // Remove the user application
             int nMyAppId = Integer.parseInt( strMyAppId );
             Plugin plugin = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
