@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>module-myportal-myapps</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>Lutece myportal myapps module</name>
 
     <repositories>
@@ -64,6 +64,6 @@
         <connection>scm:git:https://github.com/lutece-platform/lutece-myapps-module-myportal-myapps.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-platform/lutece-myapps-module-myportal-myapps.git</developerConnection>
         <url>https://github.com/lutece-platform/lutece-myapps-module-myportal-myapps.git</url>
-      <tag>module-myportal-myapps-1.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
 </project>
