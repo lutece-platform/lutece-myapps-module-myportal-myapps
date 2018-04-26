@@ -77,9 +77,13 @@ public class MyPortalMyAppsWidgetHandler implements WidgetHandler
 
     // Marks
     private static final String MARK_USER_APPLICATIONS = "user_list_applications";
+    private static final String MARK_USER_TYPE_MESSAGERIE = "typeMessagerie";
+
     private static final String MARK_ID_WIDGET = "id_widget";
     private static final String MARK_MYAPPS_URL_RETURN = "myapps_url_return";
     private static final String MARK_MYPORTAL_URL_RETURN = "myportal_url_return";
+    public static final String BUSINESS_INFO_ONLINE_TYPE_MESSAGERIE = "user.business-info.mdpTypeMessagerie";
+
 
     /**
      * {@inheritDoc}
@@ -116,11 +120,14 @@ public class MyPortalMyAppsWidgetHandler implements WidgetHandler
     {
         // Retrieve the list of the application of the user
         String strUserName = ( luteceUser != null ) ? luteceUser.getName( ) : StringUtils.EMPTY;
+        String typeMessagerie= ( luteceUser != null ) ? luteceUser.getUserInfos( ).get( BUSINESS_INFO_ONLINE_TYPE_MESSAGERIE ) : StringUtils.EMPTY;
+        typeMessagerie= ( typeMessagerie != null ) ? typeMessagerie : StringUtils.EMPTY;
         Plugin plugin = PluginService.getPlugin( MyAppsDatabasePlugin.PLUGIN_NAME );
         List<MyApps> listUserMyApps = MyAppsDatabaseHome.getMyAppsListByUser( strUserName, plugin );
 
         // Generate the model
         Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( MARK_USER_TYPE_MESSAGERIE, typeMessagerie );
         model.put( MARK_USER_APPLICATIONS, listUserMyApps );
         model.put( MARK_ID_WIDGET, ( widget != null ) ? widget.getIdWidget( ) : NumberUtils.INTEGER_MINUS_ONE );
         model.put( MARK_MYAPPS_URL_RETURN, AppPropertiesService.getProperty( PROPERTY_MYAPPS_URL_RETURN ) );
